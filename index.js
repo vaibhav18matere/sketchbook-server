@@ -6,11 +6,14 @@ const { emit } = require("process");
 
 const app = express();
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+const isDevEnv = app.settings.env === 'development';
+const URL = isDevEnv ? 'http://localhost:3000' : 'https://sketch-online.vercel.app';
+
+app.use(cors({ origin: URL }));
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-     cors: 'http://localhost:3000'
+     cors: URL
 });
 
 io.on("connection", (socket) => {
